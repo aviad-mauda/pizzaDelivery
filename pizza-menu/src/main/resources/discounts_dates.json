@@ -1,0 +1,12 @@
+[
+	{
+	  "itemId":"1",
+	  "discountStart":"2017-08-28",
+	  "discountEnd":"2020-08-28"   
+	},
+	{
+	  "itemId":"2",
+	  "discountStart":"2017-08-28",
+	  "discountEnd":"2018-08-28"      
+	}
+]

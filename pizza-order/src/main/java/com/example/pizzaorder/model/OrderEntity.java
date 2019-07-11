@@ -1,8 +1,7 @@
 package com.example.pizzaorder.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -10,10 +9,11 @@ import lombok.Data;
 @Document(collection = "orderEntity")
 public class OrderEntity {
 
-	  private int amount;
-	  private String location;
-	  private long menuId;
-	  private long orderId;
-	  OrderStatus status;
-	
+	@Id
+	private long orderId;
+	private int amount;
+	private String location;
+	private long menuId;
+	OrderStatus status;
+
 }

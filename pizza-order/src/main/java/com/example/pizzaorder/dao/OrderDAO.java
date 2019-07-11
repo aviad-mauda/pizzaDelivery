@@ -8,4 +8,7 @@ import com.example.pizzaorder.model.OrderEntity;
 
 @Service
 public interface OrderDAO extends MongoRepository<OrderEntity, Long>{
+	
+	OrderEntity findByOrderId(long orderId);
+
 }

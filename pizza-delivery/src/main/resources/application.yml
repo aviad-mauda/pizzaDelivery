@@ -1,0 +1,59 @@
+server:
+  port: 8084
+  
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        data: debug
+#      apache:
+#        zookeeper:
+#          ClientCnxn : WARN
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: pizza-orders
+  cloud:
+    zookeeper:
+      discovery:
+        enabled : true
+    stream:
+      binders:
+        kafka:
+          environment:
+            spring:
+              cloud:
+                stream:
+                  kafka:
+                    binder:
+                      brokers : localhost:9092
+                      zkNodes : localhost:2181
+          type : kafka
+      defaultBinder : kafka
+      kafka:
+        binder:
+          autoAddPartitions: true
+        bindings:
+          DELIVARY_CHANNEL:
+            consumer:
+              autoCommitOffset : true
+              autoCommitOnError : true
+              enableDlq : true
+              configuration:
+                max.poll.interval.ms: 2147483647
+                session.timeout.ms: 300000
+                heartbeat.interval.ms: 60000                        
+      bindings:
+        DELIVERY_REQUEST_OUTPUT:
+          binder: kafka
+          content-type: application/json
+          group : delivary_group
+          destination : PIZZA_DELIVERY
+        DELIVERY_REQUEST_INPUT:
+          binder: kafka
+          content-type: application/json
+          destination : PIZZA_DELIVERY
+        

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.example.pizzadelivery.gateways.consumers.sinks.IDeliveryKafkaConsumer;
 import com.example.pizzadelivery.model.OrderEntity;
 import com.example.pizzadelivery.resources.controllers.DeliveryService;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,11 +32,7 @@ public class DeliveryKafkaConsumer {
     }
 
 
-<<<<<<< HEAD
-	@StreamListener(IDeliveryKafkaConsumer.DELIVARY_CHANNEL)
-=======
 	@StreamListener(IDeliveryKafkaConsumer.DELIVERY_CHANNEL)
->>>>>>> master
     public void consume(Message<String> message) throws JsonParseException, JsonMappingException, IOException {
     	
     	log.info("#### -> Consumed message -> {}", message);

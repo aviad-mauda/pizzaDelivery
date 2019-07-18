@@ -15,10 +15,15 @@
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
+		<ms-dir>com.example.pizzadelivery</ms-dir>
 		<java.version>1.8</java.version>
+		<spring-cloud-services.version>2.1.0.RELEASE</spring-cloud-services.version>
 		<spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+		<swagger-output-folder>${basedir}/src/main/resources/swagger</swagger-output-folder>
+		<api-package>api</api-package>
+		<model-package>model</model-package>
 	</properties>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -34,23 +39,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -61,10 +56,25 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
+		</dependency>  -->
+		<dependency>
+		  <groupId>org.springframework.cloud</groupId>
+		  <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-stream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<scope>compile</scope>
+			<version>2.9.2</version>
 		</dependency>
 	</dependencies>
 
@@ -86,6 +96,30 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-codegen-maven-plugin</artifactId>
+				<version>2.2.2</version>
+				<executions>
+					<execution>
+					<id>%MS ID%</id>
+					<goals>
+						<goal>generate</goal>
+					</goals>
+					<phase>generate-resources</phase>
+					<configuration>
+						<inputSpec>${swagger-output-folder}/swagger.json</inputSpec>
+						<language>spring</language>
+						<configOptions>
+							<sourceFolder>src/main/java</sourceFolder>
+							<interfaceOnly>true</interfaceOnly>
+						</configOptions>
+						<apiPackage>${ms-dir}.${api-package}.external</apiPackage>
+						<modelPackage>${ms-dir}.${model-package}.external</modelPackage>
+					</configuration>
+					</execution>
+				</executions>
+		</plugin>
 		</plugins>
 	</build>
 

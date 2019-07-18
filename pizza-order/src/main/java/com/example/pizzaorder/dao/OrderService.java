@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import com.example.pizzaorder.gateways.producers.OrderRequestProducer;
 import com.example.pizzaorder.model.KafkaOrderStatus;
 import com.example.pizzaorder.model.OrderEntity;
+import com.example.pizzaorder.model.OrderStatus;
+import com.example.pizzaorder.resources.controllers.Validator;
+import com.example.pizzaorder.resources.rest.LocationRest;
+import com.example.pizzaorder.resources.rest.MenuRest;
 
 @Service
 public class OrderService {
@@ -17,19 +21,32 @@ public class OrderService {
 	private OrderDAO orderDAO;
 	@Autowired
     MongoTemplate mongoTemplate;
+	private Validator validator;
 	
-	public void createOrder(OrderEntity order) {
+	public OrderService (LocationRest locationRest, MenuRest menuRest) {
+		this.validator = new Validator(locationRest, menuRest);
+	}
+
+	public String createOrder(OrderEntity order) {
+			
+		if(order.getStatus() != null && order.getStatus() ==  OrderStatus.ORDERED && validator.orderValidator(order)) {
+			orderDAO.insert(order);
+			
+			return "creating order was successful";
+		}
 		
-		orderDAO.insert(order);
-		
+		return "order is not valid";
 	}
 
 	public String setStatus(KafkaOrderStatus objMessage) {
-
-		OrderEntity order = orderDAO.findByOrderId(objMessage.getOrderID());
-		order.setStatus(objMessage.getStatus());
-		orderDAO.save(order);
-		return order.getStatus().name();
+		if(objMessage.getStatus() != OrderStatus.DELETED && objMessage.getStatus() != OrderStatus.DELIVERED ) {
+			OrderEntity order = orderDAO.findByOrderId(objMessage.getOrderID());
+			order.setStatus(objMessage.getStatus());
+			orderDAO.save(order);
+			return order.getStatus().name();
+		} else {
+			return "not valid for deleted or delivered pizza";
+		}
 	}
 
 }

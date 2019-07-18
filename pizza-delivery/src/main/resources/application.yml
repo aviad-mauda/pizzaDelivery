@@ -11,12 +11,7 @@ server:
 #          ClientCnxn : WARN
 
 spring:
-<<<<<<< HEAD
   data.mongodb:
-=======
-  data:
-    mongodb:
->>>>>>> master
       host: localhost
       port: 27017
       database: pizza-orders
@@ -25,37 +20,24 @@ spring:
       discovery:
         enabled : true
     stream:
-<<<<<<< HEAD
       defaultBinder: kafka
       binders:
         kafka:
           type: kafka
-=======
-      binders:
-        kafka:
->>>>>>> master
           environment:
             spring:
               cloud:
                 stream:
                   kafka:
                     binder:
-<<<<<<< HEAD
                       brokers: localhost:9092
                       zkNodes: localhost:2181
-=======
-                      brokers : localhost:9092
-                      zkNodes : localhost:2181
-          type : kafka
-      defaultBinder : kafka
->>>>>>> master
       kafka:
         binder:
           autoAddPartitions: true
         bindings:
           DELIVARY_CHANNEL:
             consumer:
-<<<<<<< HEAD
               autoCommitOffset: true
               autoCommitOnError: true
               enableDlq: true
@@ -63,32 +45,13 @@ spring:
                 max.poll.interval.ms: 2147483647
                 session.timeout.ms: 300000
                 heartbeat.interval.ms: 60000                       
-     
-=======
-              autoCommitOffset : true
-              autoCommitOnError : true
-              enableDlq : true
-              configuration:
-                max.poll.interval.ms: 2147483647
-                session.timeout.ms: 300000
-                heartbeat.interval.ms: 60000                        
->>>>>>> master
       bindings:
         DELIVERY_REQUEST_OUTPUT:
           binder: kafka
           content-type: application/json
           group : delivary_group
-<<<<<<< HEAD
           destination : DELIVARY_CHANNEL
         DELIVERY_REQUEST_INPUT:
           binder: kafka
           content-type: application/json
           destination : DELIVARY_CHANNEL
-=======
-          destination : PIZZA_DELIVERY
-        DELIVERY_REQUEST_INPUT:
-          binder: kafka
-          content-type: application/json
-          destination : PIZZA_DELIVERY
-        
->>>>>>> master

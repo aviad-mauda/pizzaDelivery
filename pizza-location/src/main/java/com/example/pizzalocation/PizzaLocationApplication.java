@@ -8,6 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
+//@EnableEurekaServer
 public class PizzaLocationApplication {
 
 	public static void main(String[] args) {

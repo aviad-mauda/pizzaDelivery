@@ -31,7 +31,11 @@ public class DeliveryKafkaConsumer {
     }
 
 
+<<<<<<< HEAD
 	@StreamListener(IDeliveryKafkaConsumer.DELIVARY_CHANNEL)
+=======
+	@StreamListener(IDeliveryKafkaConsumer.DELIVERY_CHANNEL)
+>>>>>>> master
     public void consume(Message<String> message) throws JsonParseException, JsonMappingException, IOException {
     	
     	log.info("#### -> Consumed message -> {}", message);

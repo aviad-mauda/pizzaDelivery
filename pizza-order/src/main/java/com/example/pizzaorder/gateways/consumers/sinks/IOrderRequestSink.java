@@ -13,4 +13,5 @@ public interface IOrderRequestSink {
 	
 	@Input(STATUS_CHANNEL)
 	SubscribableChannel channelInput();
+	
 }

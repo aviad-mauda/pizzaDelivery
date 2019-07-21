@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.pizzadelivery.gateways.producers.sources.IDeliveryKafkaProducer;
 import com.example.pizzadelivery.model.external.KafkaOrderStatus;
-import com.example.pizzadelivery.resources.controllers.DeliveryService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

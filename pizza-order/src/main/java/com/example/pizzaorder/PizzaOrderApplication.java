@@ -3,6 +3,7 @@ package com.example.pizzaorder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 
@@ -11,7 +12,7 @@ import com.example.pizzaorder.gateways.producers.sources.IOrderRequestSource;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-
+@EnableEurekaClient
 @EnableBinding({
 	IOrderRequestSource.class,
 	IOrderRequestSink.class

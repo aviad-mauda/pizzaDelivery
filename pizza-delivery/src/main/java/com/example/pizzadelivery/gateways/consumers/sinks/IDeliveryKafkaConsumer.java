@@ -5,10 +5,9 @@ import org.springframework.messaging.SubscribableChannel;
 
 public interface IDeliveryKafkaConsumer {
 
-	public static String DELIVARY_CHANNEL = "DELIVERY_REQUEST_INPUT";
+	//public static String DELIVERY_CHANNEL = "DELIVERY_REQUEST_INPUT";
 	
-	@Input(DELIVARY_CHANNEL)
-	public static String DELIVERY_CHANNEL = "DELIVERY_REQUEST_INPUT";
+	public static String DELIVERY_CHANNEL = "ORDER_REQUEST_INPUT";
 	
 	@Input(DELIVERY_CHANNEL)
 	SubscribableChannel input();

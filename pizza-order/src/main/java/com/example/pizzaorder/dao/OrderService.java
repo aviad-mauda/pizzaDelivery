@@ -21,6 +21,7 @@ public class OrderService {
 	private OrderDAO orderDAO;
 	@Autowired
     MongoTemplate mongoTemplate;
+	
 	private Validator validator;
 	
 	public OrderService (LocationRest locationRest, MenuRest menuRest) {
@@ -39,14 +40,12 @@ public class OrderService {
 	}
 
 	public String setStatus(KafkaOrderStatus objMessage) {
-		if(objMessage.getStatus() != OrderStatus.DELETED && objMessage.getStatus() != OrderStatus.DELIVERED ) {
-			OrderEntity order = orderDAO.findByOrderId(objMessage.getOrderID());
-			order.setStatus(objMessage.getStatus());
-			orderDAO.save(order);
-			return order.getStatus().name();
-		} else {
-			return "not valid for deleted or delivered pizza";
-		}
+		
+		OrderEntity order = orderDAO.findByOrderId(objMessage.getOrderId());
+		order.setStatus(objMessage.getStatus());
+		orderDAO.save(order);
+		
+		return order.getStatus().name();
 	}
 
 }

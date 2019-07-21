@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class KafkaOrderStatus {
 	
-	private long orderID;
+	private long orderId;
 	private OrderStatus status;
 	
 }

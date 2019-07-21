@@ -5,8 +5,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
 import org.springframework.data.cassandra.core.mapping.CassandraMappingContext;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 @Configuration
+@EnableCassandraRepositories(
+		  basePackages = "com.example.pizzalocation.dao")
 public class CassandraConfig extends AbstractCassandraConfiguration{
 
 	public static final String KEYSPACE = "pizza"; 

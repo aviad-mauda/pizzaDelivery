@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pizzaorder.api.external.BillingApi;
 import com.example.pizzaorder.dao.OrderDAO;
+import com.example.pizzaorder.dao.OrderService;
 import com.example.pizzaorder.gateways.producers.OrderRequestProducer;
 import com.example.pizzaorder.model.CounterEntity;
 import com.example.pizzaorder.model.KafkaOrderStatus;
@@ -33,10 +34,13 @@ public class OrderRest implements BillingApi{
 	private OrderDAO orderDAO;
 	
 	private Validator validator;
+	@Autowired
+	private OrderService orderService;
 	
 	public OrderRest(MongoTemplate mongoTemplate, LocationRest locationRest, MenuRest menuRest) {
 		this.mongoTemplate = mongoTemplate;
 		this.validator = new Validator(locationRest, menuRest);
+		//this.orderService = orderService;
 	}
 	
 	@Override
@@ -45,11 +49,12 @@ public class OrderRest implements BillingApi{
 		OrderEntity orderEntity = OrderMapping(order);
 		
 		if(validator.orderValidator(orderEntity)) {
+			
 			orderEntity.setOrderId(updateIdCounter());
 			orderEntity.setStatus(OrderStatus.ORDERED);
-			kafkaOrderRequest.sendMessage(orderEntity);
-			
+			orderService.createOrder(orderEntity);
 			return new ResponseEntity<Long>(orderEntity.getOrderId(),HttpStatus.CREATED);
+			
 		}
 		
 		return new ResponseEntity<Long>((long) -1,HttpStatus.BAD_REQUEST);
@@ -74,7 +79,6 @@ public class OrderRest implements BillingApi{
 		order.setLocation(orderRequest.getLocation());
 		order.setMenuId(orderRequest.getMenuId());
 		
-		
 		return order;
 
 	}
@@ -91,28 +95,49 @@ public class OrderRest implements BillingApi{
 	@Override
 	public ResponseEntity<String> deleteOrderUsingPOST(@RequestBody OrderStatusRequest request) {
 		
-		KafkaOrderStatus kafkaStatusObj = statusMapping(request);
-		kafkaStatusObj.setStatus(OrderStatus.DELETED);
-		kafkaOrderRequest.sendMessageForStatus(kafkaStatusObj);
+		return setStatus(request, OrderStatus.DELETED);
 		
-		return new ResponseEntity<String>(kafkaStatusObj.getStatus().name(),HttpStatus.ACCEPTED);
+	}
+
+	private ResponseEntity<String> setStatus(OrderStatusRequest request, OrderStatus status) {
+
+		KafkaOrderStatus kafkaStatusObj = statusMapping(request);
+		
+		if(kafkaStatusObj.getStatus() == OrderStatus.ORDERED) {
+			kafkaStatusObj.setStatus(status);
+			orderService.setStatus(kafkaStatusObj);
+			
+			return new ResponseEntity<String>(kafkaStatusObj.getStatus().name(),HttpStatus.ACCEPTED);
+		}
+		
+		return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
 	}
 
 	@Override
 	public ResponseEntity<String> submitOrderUsingPOST(@RequestBody OrderStatusRequest request) {
 		
-		KafkaOrderStatus kafkaStatusObj = statusMapping(request);
-		kafkaStatusObj.setStatus(OrderStatus.DELIVERY);
-		kafkaOrderRequest.sendMessageForStatus(kafkaStatusObj);
+		ResponseEntity<String> res = setStatus(request, OrderStatus.DELIVERY);
+
+		if(res.getStatusCodeValue() > 200 && res.getStatusCodeValue() < 300) {
+			
+			KafkaOrderStatus kafkaStatusObj = statusMapping(request);
+			kafkaOrderRequest.sendMessageForStatus(kafkaStatusObj);
+			return new ResponseEntity<String>(kafkaStatusObj.getStatus().name() + " in progress..." ,HttpStatus.ACCEPTED);
+			
+		}
 		
-		return new ResponseEntity<String>(kafkaStatusObj.getStatus().name(),HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		
 	}
 	
 	private KafkaOrderStatus statusMapping(OrderStatusRequest request) {
 		
 		KafkaOrderStatus localkakfaStatusObj = new KafkaOrderStatus();
+		OrderEntity orderEntity = orderDAO.findByOrderId(request.getOrderId());
 		
-		localkakfaStatusObj.setOrderID(request.getOrderId());
+		localkakfaStatusObj.setOrderId(request.getOrderId());
+		localkakfaStatusObj.setStatus(orderEntity.getStatus());
 		
 		return localkakfaStatusObj;
 	}

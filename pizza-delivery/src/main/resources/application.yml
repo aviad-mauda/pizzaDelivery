@@ -36,7 +36,7 @@ spring:
         binder:
           autoAddPartitions: true
         bindings:
-          DELIVARY_CHANNEL:
+          ORDER_REQUEST_INPUT:
             consumer:
               autoCommitOffset: true
               autoCommitOnError: true
@@ -46,12 +46,12 @@ spring:
                 session.timeout.ms: 300000
                 heartbeat.interval.ms: 60000                       
       bindings:
-        DELIVERY_REQUEST_OUTPUT:
+        ORDER_REQUEST_INPUT:
           binder: kafka
           content-type: application/json
           group : delivary_group
-          destination : DELIVARY_CHANNEL
-        DELIVERY_REQUEST_INPUT:
-          binder: kafka
-          content-type: application/json
-          destination : DELIVARY_CHANNEL
+          destination : ORDER_REQUEST
+#        ORDER_REQUEST_OUTPUT:
+#          binder: kafka
+#          content-type: application/json
+#          destination : DELIVARY_CHANNEL

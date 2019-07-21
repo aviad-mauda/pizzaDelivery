@@ -5,13 +5,13 @@ import org.springframework.messaging.SubscribableChannel;
 
 public interface IOrderRequestSink {
 
-	public static String CHANNEL_NAME = "ORDER_REQUEST_INPUT";
-	public static String STATUS_CHANNEL = "ORDER_STATUS_INPUT";
+	//public static String CHANNEL_NAME = "ORDER_REQUEST_INPUT";
+	//public static String STATUS_CHANNEL = "ORDER_STATUS_INPUT";
 	
-	@Input(CHANNEL_NAME)
-	SubscribableChannel input();
+	//@Input(CHANNEL_NAME)
+	//SubscribableChannel input();
 	
-	@Input(STATUS_CHANNEL)
-	SubscribableChannel channelInput();
+	//@Input(STATUS_CHANNEL)
+	//SubscribableChannel channelInput();
 	
 }

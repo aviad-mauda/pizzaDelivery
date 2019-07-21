@@ -31,7 +31,7 @@ public class OrderRequestConsumer {
     	objectMapper = new ObjectMapper();
     }
 
-
+    /*	
 	@StreamListener(IOrderRequestSink.CHANNEL_NAME)
     public void consume(Message<String> message) throws JsonParseException, JsonMappingException, IOException {
     	
@@ -41,7 +41,7 @@ public class OrderRequestConsumer {
 		orderService.createOrder(objMessage);
     		
     }
-	
+
 	@StreamListener(IOrderRequestSink.STATUS_CHANNEL)
     public void statusConsume(Message<String> message) throws JsonParseException, JsonMappingException, IOException {
     	
@@ -50,4 +50,5 @@ public class OrderRequestConsumer {
     	KafkaOrderStatus objMessage = objectMapper.readValue(message.getPayload() , KafkaOrderStatus.class);
     	orderService.setStatus(objMessage);
     }
+    */
 }
